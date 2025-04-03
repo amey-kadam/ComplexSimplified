@@ -10,7 +10,7 @@ export default function HeaderSection() {
               <Zap className="h-7 w-7 text-white" />
             </div>
             <h1 className="font-heading font-bold text-xl sm:text-3xl gradient-text">
-              Explain Like I'm Five
+              CurioPal
             </h1>
           </div>
           <a href="#" className="text-sm font-medium px-4 py-2 rounded-full btn-bright">

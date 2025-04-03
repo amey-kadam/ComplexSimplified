@@ -81,7 +81,7 @@ export default function Home() {
               Simplify Complex Topics
             </h2>
             <p className="text-gray-600 mb-6 max-w-lg mx-auto">
-              Enter any complex topic, and we'll explain it like you're five years old — in simple, easy-to-understand terms.
+              Enter any complex topic, and CurioPal will explain it in simple, easy-to-understand terms.
             </p>
             
             <div className="flex flex-wrap justify-center gap-4 mb-2">

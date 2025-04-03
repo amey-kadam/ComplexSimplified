@@ -24,7 +24,7 @@ export default function FooterSection() {
           <p className="mt-6 text-center md:mt-0 flex items-center justify-center md:justify-end text-gray-600">
             <span>Made with</span> 
             <Heart className="h-4 w-4 mx-1 text-red-500 animate-pulse" /> 
-            <span>&copy; {currentYear} Explain Like I'm Five</span>
+            <span>&copy; {currentYear} CurioPal</span>
           </p>
         </div>
       </div>

@@ -11,7 +11,7 @@ export default function EmptyState() {
           </div>
           <h3 className="text-xl font-bold gradient-text mb-3">Ready to Simplify!</h3>
           <p className="text-gray-600 max-w-md text-lg">
-            Enter any complex topic above and we'll transform it into a child-friendly explanation.
+            Enter any complex topic above and CurioPal will transform it into a simple, easy-to-understand explanation.
           </p>
         </div>
       </CardContent>
