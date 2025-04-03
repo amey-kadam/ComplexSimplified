@@ -56,7 +56,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
               Choose explanation length:
             </h3>
             <div className="flex gap-4 flex-wrap">
-              <label className="relative flex-1 min-w-[140px]">
+              <label className="relative inline-block">
                 <input
                   type="radio"
                   name="explanationType"
@@ -65,28 +65,28 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("short")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
-                  <div className="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-7 w-7 mx-auto mb-2 text-orange-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 5l7 7-7 7M5 5l7 7-7 7"
-                      />
-                    </svg>
-                    <span className="block text-base font-medium">Short</span>
-                    <span className="block text-sm text-gray-500">Quick summary</span>
+                <div className="flex items-center px-3 py-2 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-2 text-orange-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                    />
+                  </svg>
+                  <div>
+                    <span className="text-sm font-medium">Short</span>
+                    <span className="block text-xs text-gray-500">Quick summary</span>
                   </div>
                 </div>
               </label>
-              <label className="relative flex-1 min-w-[140px]">
+              <label className="relative inline-block">
                 <input
                   type="radio"
                   name="explanationType"
@@ -95,24 +95,24 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("long")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
-                  <div className="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-7 w-7 mx-auto mb-2 text-orange-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                    <span className="block text-base font-medium">Long</span>
-                    <span className="block text-sm text-gray-500">Detailed explanation</span>
+                <div className="flex items-center px-3 py-2 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-2 text-orange-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                  <div>
+                    <span className="text-sm font-medium">Long</span>
+                    <span className="block text-xs text-gray-500">Detailed explanation</span>
                   </div>
                 </div>
               </label>
