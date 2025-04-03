@@ -60,10 +60,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("short")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md bg-yellow-300 peer-checked:border-orange-400 peer-checked:bg-yellow-400 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
+                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md bg-red-500 text-white peer-checked:border-red-700 peer-checked:bg-red-600 peer-focus:ring-2 peer-focus:ring-red-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mr-2 text-orange-600"
+                    className="h-4 w-4 mr-2 text-white"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -76,8 +76,8 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                     />
                   </svg>
                   <div>
-                    <span className="font-medium text-gray-800">Short</span>
-                    <span className="block text-xs text-gray-700">Quick summary</span>
+                    <span className="font-medium text-white">Short</span>
+                    <span className="block text-xs text-gray-100">Quick summary</span>
                   </div>
                 </div>
               </label>
@@ -90,10 +90,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("long")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md bg-yellow-300 peer-checked:border-orange-400 peer-checked:bg-yellow-400 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
+                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md bg-red-500 text-white peer-checked:border-red-700 peer-checked:bg-red-600 peer-focus:ring-2 peer-focus:ring-red-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mr-2 text-orange-600"
+                    className="h-4 w-4 mr-2 text-white"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -106,8 +106,8 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                     />
                   </svg>
                   <div>
-                    <span className="font-medium text-gray-800">Long</span>
-                    <span className="block text-xs text-gray-700">Detailed explanation</span>
+                    <span className="font-medium text-white">Long</span>
+                    <span className="block text-xs text-gray-100">Detailed explanation</span>
                   </div>
                 </div>
               </label>
