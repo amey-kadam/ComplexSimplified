@@ -46,7 +46,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
   };
 
   return (
-    <Card className="bg-white rounded-xl shadow-lg p-3 mb-8 card-highlight">
+    <Card className="bg-yellow-300 rounded-xl shadow-lg p-3 mb-8 card-highlight">
       <CardContent className="pt-4">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
