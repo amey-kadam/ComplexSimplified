@@ -34,7 +34,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
     <Card className="bg-white rounded-xl shadow-lg p-3 mb-8 card-highlight">
       <CardContent className="pt-4">
         <form onSubmit={handleSubmit}>
-          <div className="mb-6">
+          <div className="mb-4">
             <Label htmlFor="topic" className="block text-lg font-medium gradient-text mb-2">
               What topic would you like explained?
             </Label>
@@ -49,13 +49,8 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 required
               />
             </div>
-          </div>
-
-          <div className="mb-8">
-            <h3 className="block text-lg font-medium gradient-text mb-3">
-              Choose explanation length:
-            </h3>
-            <div className="flex gap-4 flex-wrap">
+            
+            <div className="flex gap-2 mt-2 justify-end">
               <label className="relative inline-block">
                 <input
                   type="radio"
@@ -65,10 +60,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("short")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-3 py-2 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
+                <div className="flex items-center px-2 py-1 text-xs border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 text-orange-500"
+                    className="h-3 w-3 mr-1 text-orange-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -80,10 +75,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                       d="M13 5l7 7-7 7M5 5l7 7-7 7"
                     />
                   </svg>
-                  <div>
-                    <span className="text-sm font-medium">Short</span>
-                    <span className="block text-xs text-gray-500">Quick summary</span>
-                  </div>
+                  <span className="font-medium">Short</span>
                 </div>
               </label>
               <label className="relative inline-block">
@@ -95,10 +87,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("long")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-3 py-2 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
+                <div className="flex items-center px-2 py-1 text-xs border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 text-orange-500"
+                    className="h-3 w-3 mr-1 text-orange-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -110,13 +102,13 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                       d="M4 6h16M4 12h16M4 18h16"
                     />
                   </svg>
-                  <div>
-                    <span className="text-sm font-medium">Long</span>
-                    <span className="block text-xs text-gray-500">Detailed explanation</span>
-                  </div>
+                  <span className="font-medium">Long</span>
                 </div>
               </label>
             </div>
+          </div>
+          
+          <div className="mb-6">
           </div>
 
           <Button 
