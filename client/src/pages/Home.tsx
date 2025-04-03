@@ -123,7 +123,7 @@ export default function Home() {
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Beginner
+                5-Year-Old
               </button>
               <button 
                 onClick={() => handleKnowledgeLevelChange("intermediate")}
@@ -133,7 +133,7 @@ export default function Home() {
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Intermediate
+                &lt;15 Years
               </button>
               <button 
                 onClick={() => handleKnowledgeLevelChange("advanced")}
@@ -143,7 +143,7 @@ export default function Home() {
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Advanced
+                &lt;25 Years
               </button>
               <button 
                 onClick={() => handleKnowledgeLevelChange("expert")}
@@ -153,12 +153,12 @@ export default function Home() {
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Expert
+                50+ Years
               </button>
             </div>
           </div>
           <div className="text-xs text-gray-500 mt-1 text-center">
-            From simple explanations for beginners to detailed concepts for experts
+            Select an age level to determine the complexity of the explanation
           </div>
         </div>
         

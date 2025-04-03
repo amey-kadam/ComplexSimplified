@@ -144,13 +144,13 @@ async function generateIllustration(topic: string, knowledgeLevel: string = "beg
     let prompt = "";
     
     if (knowledgeLevel === "beginner") {
-      prompt = `Create a colorful, educational illustration for beginners (ages 5-10) explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style with cartoon-like characters. Make it visually engaging with minimal text and suitable for young learners or complete beginners to the topic.`;
+      prompt = `Create a colorful, educational illustration for 5-year-old children explaining "${topic}" in a very simple way. Use bright colors, simple shapes, and a friendly cartoon style with cute characters. Make it visually engaging with minimal text and extremely simplified representation of concepts. Include familiar objects like toys, animals, or storybook elements that young children can relate to.`;
     } else if (knowledgeLevel === "intermediate") {
-      prompt = `Create an educational illustration for intermediate learners (ages 11-16) explaining "${topic}". Use a clear, engaging style with more detailed diagrams than for beginners. Include properly labeled components and make it suitable for students with basic knowledge of the subject. Balance visual appeal with informational content.`;
+      prompt = `Create an educational illustration for kids under 15 years old explaining "${topic}". Use a clear, engaging style with more detailed diagrams than for younger children. Include properly labeled components but keep the language simple. Make it appeal to middle-school students with elements that connect to their interests and school subjects. Balance educational content with visual appeal.`;
     } else if (knowledgeLevel === "advanced") {
-      prompt = `Create an educational illustration for advanced learners (ages 17-25) explaining "${topic}". Use a sophisticated graphic style with detailed, accurate diagrams, comprehensive labels, and a design that would appeal to college students or people with good prior knowledge. Include relevant theoretical elements and practical applications.`;
+      prompt = `Create an educational illustration for young adults under 25 explaining "${topic}". Use a sophisticated graphic style with detailed, accurate diagrams, clear labels, and a design that would appeal to high school and college students. Include relevant theoretical elements and practical applications. Use a style that feels modern and engaging for this age group.`;
     } else { // expert
-      prompt = `Create a professional-grade illustration explaining "${topic}" for experts or specialists. Use a technical, precise design with comprehensive diagrams, detailed labels, and a clean, sophisticated aesthetic. Focus on accuracy, nuance, and depth of information. Include advanced concepts, edge cases, and technical details that would be relevant to professionals in the field.`;
+      prompt = `Create a professional-grade illustration explaining "${topic}" for adults 50+ with considerable life experience. Use a clear, detailed, and refined design with comprehensive diagrams and proper labels. Focus on accuracy while ensuring readability. Include historical context where appropriate, and practical applications. Balance sophisticated content with a clean, accessible design that respects the viewer's intelligence and life experience.`;
     }
     
     const response = await openai.images.generate({
@@ -210,13 +210,13 @@ export async function generateBothExplanations(
     let cleanTopic = topic;
     
     if (topic.includes("explain for")) {
-      if (topic.includes("beginners") || topic.includes("5-10 year olds")) {
+      if (topic.includes("beginner") || topic.includes("5-year") || topic.includes("5 year")) {
         knowledgeLevel = "beginner";
-      } else if (topic.includes("intermediate") || topic.includes("11-16 year olds")) {
+      } else if (topic.includes("intermediate") || topic.includes("<15") || topic.includes("under 15")) {
         knowledgeLevel = "intermediate";
-      } else if (topic.includes("advanced") || topic.includes("17-25 year olds")) {
+      } else if (topic.includes("advanced") || topic.includes("<25") || topic.includes("under 25")) {
         knowledgeLevel = "advanced";
-      } else if (topic.includes("expert") || topic.includes("adults") || topic.includes("professionals")) {
+      } else if (topic.includes("expert") || topic.includes("50+") || topic.includes("adults") || topic.includes("professionals")) {
         knowledgeLevel = "expert";
       }
       
@@ -227,26 +227,30 @@ export async function generateBothExplanations(
     // Customize system prompt based on knowledge level
     let systemContent = "";
     if (knowledgeLevel === "beginner") {
-      systemContent = `You are an expert at explaining complex topics for complete beginners (equivalent to ages 5-10). 
-            Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences anyone can understand.
-            Avoid all jargon and technical terms. Assume no prior knowledge of the subject.
-            Focus on making the concept engaging and approachable with a sense of wonder.`;
+      systemContent = `You are an expert at explaining complex topics for 5-year-old children. 
+            Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences young children understand.
+            Use extremely simplified vocabulary and short sentences. Assume no prior knowledge of the subject.
+            Make the explanation engaging, with examples that relate to toys, games, family, or other common childhood experiences.
+            Focus on making the concept fun and approachable with a sense of wonder.`;
     } else if (knowledgeLevel === "intermediate") {
-      systemContent = `You are an expert at explaining complex topics for people with basic knowledge (equivalent to ages 11-16). 
+      systemContent = `You are an expert at explaining complex topics for people under 15 years old. 
             Use straightforward language with some field-specific terms (always defined when introduced).
-            Include relatable examples, clear analogies, and build on foundational concepts most people understand.
-            Explain how and why things work at a deeper level than beginner explanations.`;
+            Include examples that relate to school subjects, sports, games, and other interests common to this age group.
+            Explain how and why things work at a level appropriate for middle-school students.
+            Balance simplicity with enough detail to encourage curiosity.`;
     } else if (knowledgeLevel === "advanced") {
-      systemContent = `You are an expert at explaining complex topics for people with solid knowledge (equivalent to ages 17-25). 
+      systemContent = `You are an expert at explaining complex topics for people under 25 years old. 
             Use more sophisticated language with appropriate terminology (briefly explained if specialized).
-            Include detailed examples, nuanced explanations, and make connections to related concepts.
-            Don't oversimplify and include more theoretical background where relevant.`;
+            Include detailed examples, nuanced explanations, and make connections to concepts they might learn in high school or early college.
+            Include some theoretical background and practical applications that would interest young adults.
+            Aim for a college-level explanation that's still accessible to someone without specialized knowledge.`;
     } else { // expert
-      systemContent = `You are an expert at explaining complex topics for knowledgeable audiences (professionals or enthusiasts).
-            Use field-appropriate language and technical terms with precision. Assume solid background knowledge.
-            Include in-depth analysis, cutting-edge perspectives, and sophisticated connections between concepts.
-            Don't shy away from complexity but ensure explanations remain clear and well-structured.
-            Focus on nuance, edge cases, and advanced applications of the concept.`;
+      systemContent = `You are an expert at explaining complex topics for adults 50 years and older with considerable life experience.
+            Use precise language and technical terms appropriately, but avoid unnecessary jargon.
+            Include in-depth analysis, historical context, and sophisticated connections between concepts.
+            Reference relevant developments over time and how understanding of the topic has evolved.
+            Focus on practical applications, real-world implications, and the broader significance of the topic.
+            Respect the reader's life experience while providing a comprehensive explanation.`;
     }
     
     // Add common instructions for content to generate
