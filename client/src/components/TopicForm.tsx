@@ -60,7 +60,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., Quantum physics, Climate change, Blockchain..."
-                className="w-full px-4 py-3 border-2 border-yellow-300 rounded-lg focus:border-orange-400 focus:ring-orange-300 text-lg"
+                className="w-full px-4 py-3 border-2 border-yellow-500 rounded-lg focus:border-orange-400 focus:ring-orange-300 text-lg bg-white"
                 required
               />
             </div>
@@ -138,7 +138,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 <input
                   type="checkbox"
                   id="include-flashcards"
-                  className="w-4 h-4 text-orange-500 border-2 border-yellow-300 rounded-sm focus:ring-orange-300"
+                  className="w-4 h-4 text-orange-500 border-2 border-yellow-500 rounded-sm focus:ring-orange-300"
                   checked={includeFlashcards}
                   onChange={(e) => setIncludeFlashcards(e.target.checked)}
                 />
@@ -165,7 +165,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 <input
                   type="checkbox"
                   id="include-flowchart"
-                  className="w-4 h-4 text-orange-500 border-2 border-yellow-300 rounded-sm focus:ring-orange-300"
+                  className="w-4 h-4 text-orange-500 border-2 border-yellow-500 rounded-sm focus:ring-orange-300"
                   checked={includeFlowchart}
                   onChange={(e) => setIncludeFlowchart(e.target.checked)}
                 />
@@ -192,7 +192,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 <input
                   type="checkbox"
                   id="include-illustration"
-                  className="w-4 h-4 text-orange-500 border-2 border-yellow-300 rounded-sm focus:ring-orange-300"
+                  className="w-4 h-4 text-orange-500 border-2 border-yellow-500 rounded-sm focus:ring-orange-300"
                   checked={includeIllustration}
                   onChange={(e) => setIncludeIllustration(e.target.checked)}
                 />
