@@ -103,24 +103,24 @@ export default function Home() {
   return (
     <div className="pb-10">
       {/* Intro Section */}
-      <section className="mb-8 text-center">
-        <h1 className="font-bold text-3xl sm:text-4xl mb-4 bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
+      <section className="mb-8 text-center py-6 px-4 bg-yellow-300 rounded-xl border-2 border-yellow-500 shadow-md max-w-4xl mx-auto">
+        <h1 className="font-bold text-3xl sm:text-4xl mb-4 bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent animate-pulse">
           Simplify Complex Topics
         </h1>
-        <p className="text-gray-600 mb-3 max-w-lg mx-auto">
+        <p className="text-gray-800 font-medium mb-3 max-w-lg mx-auto">
           Enter any complex topic, and CurioPal will explain it in simple, easy-to-understand terms.
         </p>
         
         {/* Knowledge Level Selector */}
         <div className="max-w-xl mx-auto mb-4">
           <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-1 rounded-xl shadow-md">
-            <div className="flex justify-between bg-white rounded-lg p-1">
+            <div className="flex justify-between bg-yellow-100 rounded-lg p-1 border border-yellow-400">
               <button 
                 onClick={() => handleKnowledgeLevelChange("beginner")}
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
                   knowledgeLevel === "beginner" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-gray-700 hover:bg-yellow-200"
                 }`}
               >
                 5-Year-Old
@@ -130,7 +130,7 @@ export default function Home() {
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
                   knowledgeLevel === "intermediate" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-gray-700 hover:bg-yellow-200"
                 }`}
               >
                 &lt;15 Years
@@ -140,7 +140,7 @@ export default function Home() {
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
                   knowledgeLevel === "advanced" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-gray-700 hover:bg-yellow-200"
                 }`}
               >
                 &lt;25 Years
@@ -150,7 +150,7 @@ export default function Home() {
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
                   knowledgeLevel === "expert" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-gray-700 hover:bg-yellow-200"
                 }`}
               >
                 50+ Years
@@ -163,11 +163,11 @@ export default function Home() {
         </div>
         
         <div className="flex flex-wrap justify-center gap-4 mb-2">
-          <div className="flex items-center bg-yellow-100 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-yellow-400 px-4 py-2 rounded-full border-2 border-yellow-500 shadow-md">
             <span className="text-xl mr-2">⚡</span>
             <span className="text-sm font-medium">Simple explanations</span>
           </div>
-          <div className="flex items-center bg-orange-100 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-yellow-300 px-4 py-2 rounded-full border-2 border-yellow-500 shadow-md">
             <span className="text-xl mr-2">📚</span>
             <span className="text-sm font-medium">Short & long options</span>
           </div>
