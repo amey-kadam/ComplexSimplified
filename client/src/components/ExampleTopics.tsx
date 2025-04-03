@@ -55,7 +55,7 @@ export default function ExampleTopics({ onSelectTopic }: ExampleTopicsProps) {
       <CardContent className="p-0">
         <div className="flex items-center mb-5">
           <Sparkles className="h-6 w-6 text-orange-500 mr-2" />
-          <h3 className="font-heading font-bold text-xl gradient-text">Popular Topics</h3>
+          <h3 className="font-heading font-bold text-xl gradient-text">Trending Topics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
