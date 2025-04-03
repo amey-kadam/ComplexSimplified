@@ -50,7 +50,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
               />
             </div>
             
-            <div className="flex gap-2 mt-2 justify-end">
+            <div className="flex gap-3 mt-2 justify-end">
               <label className="relative inline-block">
                 <input
                   type="radio"
@@ -60,10 +60,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("short")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-2 py-1 text-xs border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
+                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 mr-1 text-orange-500"
+                    className="h-4 w-4 mr-2 text-orange-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -87,10 +87,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("long")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center px-2 py-1 text-xs border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
+                <div className="flex items-center px-3 py-2 text-sm border-2 rounded-md peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 mr-1 text-orange-500"
+                    className="h-4 w-4 mr-2 text-orange-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
