@@ -50,7 +50,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
               />
             </div>
             
-            <div className="flex gap-3 mt-2 justify-end">
+            <div className="flex gap-3 mt-2 justify-start">
               <label className="relative inline-block">
                 <input
                   type="radio"
