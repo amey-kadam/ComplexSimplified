@@ -18,31 +18,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cachedExplanation = await storage.getExplanationByTopic(topic);
       
       if (cachedExplanation) {
+        // Parse flashcards from JSON string
+        const flashcards = cachedExplanation.flashcards 
+          ? JSON.parse(cachedExplanation.flashcards) 
+          : [];
+          
         // Return cached explanation if available
         return res.json({
           topic: cachedExplanation.topic,
           explanation: explanationType === "short" 
             ? cachedExplanation.shortExplanation 
             : cachedExplanation.longExplanation,
-          explanationType
+          explanationType,
+          flashcards: flashcards,
+          flowchart: cachedExplanation.flowchart
         });
       }
       
-      // Generate new explanations
-      const { shortExplanation, longExplanation } = await generateBothExplanations(topic);
+      // Generate new explanations with flashcards and flowchart
+      const { shortExplanation, longExplanation, flashcards, flowchart } = await generateBothExplanations(topic);
       
-      // Store both explanations in memory storage
+      // Store both explanations with flashcards and flowchart in storage
       await storage.createExplanation({
         topic,
         shortExplanation,
-        longExplanation
+        longExplanation,
+        flashcards,
+        flowchart
       });
       
-      // Return the requested explanation type
+      // Return the requested explanation type along with flashcards and flowchart
       res.json({
         topic,
         explanation: explanationType === "short" ? shortExplanation : longExplanation,
-        explanationType
+        explanationType,
+        flashcards: JSON.parse(flashcards),
+        flowchart
       });
       
     } catch (error) {

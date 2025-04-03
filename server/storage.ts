@@ -61,10 +61,15 @@ export class MemStorage implements IStorage {
     const id = this.currentId++;
     const createdAt = new Date();
     
+    // Create a properly typed explanation object
     const explanation: Explanation = { 
-      ...insertExplanation, 
       id,
-      createdAt 
+      topic: insertExplanation.topic,
+      shortExplanation: insertExplanation.shortExplanation,
+      longExplanation: insertExplanation.longExplanation,
+      flashcards: insertExplanation.flashcards || "[]",
+      flowchart: insertExplanation.flowchart || "",
+      createdAt
     };
     
     this.explanations.set(id, explanation);

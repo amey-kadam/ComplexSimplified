@@ -53,12 +53,15 @@ export async function generateExplanation(
 
 /**
  * Generates both short and long explanations for a topic in a single batch request
+ * Along with flashcards and a flowchart
  * @param topic The complex topic to explain
- * @returns Object containing both short and long explanations
+ * @returns Object containing both short and long explanations, flashcards, and flowchart
  */
 export async function generateBothExplanations(topic: string): Promise<{
   shortExplanation: string;
   longExplanation: string;
+  flashcards: string;
+  flowchart: string;
 }> {
   try {
     const response = await openai.chat.completions.create({
@@ -67,21 +70,30 @@ export async function generateBothExplanations(topic: string): Promise<{
         {
           role: "system",
           content: 
-            `You are an expert at explaining complex topics in simple terms that a 5-year-old child could understand. 
+            `You are an expert at explaining complex topics in simple terms that anyone can understand. 
             Use simple language, concrete examples, and engaging analogies.
             Avoid jargon, technical terms, and complex sentences.
-            You will provide TWO explanations of the topic:
+            
+            You will provide FOUR components for the topic:
             1. A SHORT explanation (2-3 sentences, ~50 words)
             2. A LONG explanation (several paragraphs, ~300 words)
-            Format your response as valid JSON with the fields "shortExplanation" and "longExplanation".`
+            3. FLASHCARDS (5 question-answer pairs to help learn the topic)
+            4. A simple FLOWCHART (represented in text format with arrows -> and bullet points)
+            
+            Format your response as valid JSON with the fields:
+            - "shortExplanation" (string)
+            - "longExplanation" (string)
+            - "flashcards" (array of objects with "question" and "answer" fields)
+            - "flowchart" (string with a simple text-based flowchart)`
         },
         {
           role: "user",
-          content: `Explain this complex topic in simple terms that a 5-year-old would understand: ${topic}`
+          content: `Explain this complex topic in simple terms: ${topic}`
         }
       ],
       response_format: { type: "json_object" },
       temperature: 0.7,
+      max_tokens: 2000,
     });
 
     const content = response.choices[0].message.content;
@@ -92,7 +104,9 @@ export async function generateBothExplanations(topic: string): Promise<{
     const parsedResponse = JSON.parse(content);
     return {
       shortExplanation: parsedResponse.shortExplanation,
-      longExplanation: parsedResponse.longExplanation
+      longExplanation: parsedResponse.longExplanation,
+      flashcards: JSON.stringify(parsedResponse.flashcards),
+      flowchart: parsedResponse.flowchart
     };
   } catch (error) {
     console.error("Error generating explanations:", error);

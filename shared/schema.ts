@@ -8,6 +8,8 @@ export const explanations = pgTable("explanations", {
   topic: text("topic").notNull(),
   shortExplanation: text("short_explanation").notNull(),
   longExplanation: text("long_explanation").notNull(),
+  flashcards: text("flashcards").default("[]"), // JSON string of flashcards
+  flowchart: text("flowchart").default(""), // Text-based flowchart
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -15,6 +17,8 @@ export const insertExplanationSchema = createInsertSchema(explanations).pick({
   topic: true,
   shortExplanation: true,
   longExplanation: true,
+  flashcards: true,
+  flowchart: true,
 });
 
 // Request schema for generating explanations
@@ -27,9 +31,17 @@ export type InsertExplanation = z.infer<typeof insertExplanationSchema>;
 export type Explanation = typeof explanations.$inferSelect;
 export type GenerateExplanationRequest = z.infer<typeof generateExplanationSchema>;
 
+// Flashcard interface
+export interface Flashcard {
+  question: string;
+  answer: string;
+}
+
 // Response schema for explanation API
 export interface ExplanationResponse {
   topic: string;
   explanation: string;
   explanationType: "short" | "long";
+  flashcards?: Flashcard[];
+  flowchart?: string;
 }
