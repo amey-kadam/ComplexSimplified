@@ -75,7 +75,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                       d="M13 5l7 7-7 7M5 5l7 7-7 7"
                     />
                   </svg>
-                  <span className="font-medium">Short</span>
+                  <div>
+                    <span className="font-medium">Short</span>
+                    <span className="block text-xs text-gray-500">Quick summary</span>
+                  </div>
                 </div>
               </label>
               <label className="relative inline-block">
@@ -102,7 +105,10 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                       d="M4 6h16M4 12h16M4 18h16"
                     />
                   </svg>
-                  <span className="font-medium">Long</span>
+                  <div>
+                    <span className="font-medium">Long</span>
+                    <span className="block text-xs text-gray-500">Detailed explanation</span>
+                  </div>
                 </div>
               </label>
             </div>
