@@ -98,8 +98,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       console.error("Error generating explanation:", error);
-      res.status(500).json({ 
-        message: "Failed to generate explanation. Please try again later." 
+      
+      // Get more specific error message if available
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      
+      console.error("Detailed error:", errorMessage);
+      
+      // Check if error is related to API key issues
+      const isApiKeyError = errorMessage.toLowerCase().includes("api key");
+      const statusCode = isApiKeyError ? 401 : 500;
+      
+      const userMessage = isApiKeyError
+        ? "OpenAI API key error. The service is temporarily unavailable."
+        : "Failed to generate explanation. Please try again later.";
+      
+      res.status(statusCode).json({ 
+        message: userMessage,
+        error: errorMessage 
       });
     }
   });

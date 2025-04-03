@@ -92,9 +92,36 @@ export async function generateExplanation(
     });
 
     return response.choices[0].message.content || "Sorry, I couldn't generate an explanation.";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating explanation:", error);
-    throw new Error("Failed to generate explanation");
+    
+    // Extract more specific error information if available
+    if (error.response) {
+      // OpenAI API error response
+      console.error("OpenAI API Error Details (generateExplanation):");
+      console.error("Status:", error.response.status);
+      console.error("Headers:", error.response.headers);
+      console.error("Data:", error.response.data);
+      
+      // Check for API key issues
+      if (error.response.status === 401) {
+        throw new Error("OpenAI API key error: Authentication failed. Please check your API key.");
+      } else if (error.response.data && error.response.data.error && error.response.data.error.code === 'invalid_api_key') {
+        throw new Error("OpenAI API key error: The API key provided is invalid.");
+      }
+      
+      throw new Error(`OpenAI API error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+    } else if (error.message) {
+      // Check for common API key related error messages
+      if (error.message.includes('api key') || error.message.includes('API key') || 
+          error.message.includes('apiKey') || error.message.includes('auth')) {
+        throw new Error(`OpenAI API key error: ${error.message}`);
+      }
+      
+      throw new Error(`Failed to generate explanation: ${error.message}`);
+    } else {
+      throw new Error("Failed to generate explanation due to an unknown error");
+    }
   }
 }
 
@@ -169,9 +196,22 @@ async function generateIllustration(topic: string, knowledgeLevel: string = "beg
     // Download the image and convert to base64
     const base64Image = await downloadImageAsBase64(imageUrl);
     return base64Image;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating illustration:", error);
-    throw new Error("Failed to generate illustration");
+    
+    // Extract more specific error information if available
+    if (error.response) {
+      // OpenAI API error response
+      console.error("OpenAI API Error Details (Illustration):");
+      console.error("Status:", error.response.status);
+      console.error("Headers:", error.response.headers);
+      console.error("Data:", error.response.data);
+      throw new Error(`OpenAI API error generating illustration: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+    } else if (error.message) {
+      throw new Error(`Failed to generate illustration: ${error.message}`);
+    } else {
+      throw new Error("Failed to generate illustration due to an unknown error");
+    }
   }
 }
 
@@ -197,6 +237,15 @@ export async function generateBothExplanations(
   illustration: string;
 }> {
   try {
+    console.log(`Starting generateBothExplanations for topic: "${topic}"`);
+    console.log(`With options - flashcards: ${includeFlashcards}, flowchart: ${includeFlowchart}, illustration: ${includeIllustration}`);
+    
+    // Verify OpenAI API key is set
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("OPENAI_API_KEY environment variable is not set");
+      throw new Error("OpenAI API key is not configured");
+    }
+    
     // Step 1: Generate text content (explanations, flashcards, flowchart)
     let textContent: {
       shortExplanation: string;
@@ -223,6 +272,8 @@ export async function generateBothExplanations(
       // Remove the knowledge level instruction from the topic
       cleanTopic = topic.split("(explain for")[0].trim();
     }
+    
+    console.log(`Using knowledge level: ${knowledgeLevel} for cleaned topic: "${cleanTopic}"`);
     
     // Customize system prompt based on knowledge level
     let systemContent = "";
@@ -330,8 +381,40 @@ export async function generateBothExplanations(
       ...textContent,
       illustration
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Log detailed error information
     console.error("Error generating explanations:", error);
-    throw new Error("Failed to generate explanations");
+    
+    // Extract more specific error information if available
+    if (error.response) {
+      // OpenAI API error response
+      console.error("OpenAI API Error Details (generateBothExplanations):");
+      console.error("Status:", error.response.status);
+      console.error("Headers:", error.response.headers);
+      console.error("Data:", error.response.data);
+      
+      // Check for API key issues
+      if (error.response.status === 401) {
+        throw new Error("OpenAI API key error: Authentication failed. Please check your API key.");
+      } else if (error.response.data && error.response.data.error && error.response.data.error.code === 'invalid_api_key') {
+        throw new Error("OpenAI API key error: The API key provided is invalid.");
+      }
+      
+      throw new Error(`OpenAI API error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+    } else if (error.message) {
+      // Check for common API key related error messages
+      if (error.message.includes('api key') || error.message.includes('API key') || 
+          error.message.includes('apiKey') || error.message.includes('auth')) {
+        throw new Error(`OpenAI API key error: ${error.message}`);
+      } else if (error.message === "OpenAI API key is not configured") {
+        throw new Error("OpenAI API key error: API key is missing or not configured correctly.");
+      }
+      
+      // Regular error with message
+      throw new Error(`Failed to generate explanations: ${error.message}`);
+    } else {
+      // Unknown error type
+      throw new Error("Failed to generate explanations due to an unknown error");
+    }
   }
 }

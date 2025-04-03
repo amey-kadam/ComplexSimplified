@@ -49,9 +49,16 @@ export default function Home() {
     },
     onError: (error) => {
       console.error("Error generating explanation:", error);
+      
+      // Check if error is related to API key issues
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const isApiKeyError = errorMessage.toLowerCase().includes("api key");
+      
       toast({
-        title: "Error",
-        description: "Failed to generate explanation. Please try again.",
+        title: isApiKeyError ? "API Key Error" : "Error",
+        description: isApiKeyError
+          ? "There seems to be an issue with the OpenAI API key. Please try again later or contact support."
+          : "Failed to generate explanation. Please try again.",
         variant: "destructive",
       });
     },

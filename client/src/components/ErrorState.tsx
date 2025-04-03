@@ -18,8 +18,17 @@ export default function ErrorState({ error, onTryAgain }: ErrorStateProps) {
           <h3 className="text-xl font-bold text-red-500 mb-3">
             Oops! Something went wrong
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto mb-6 text-lg">
-            {error?.message || "We couldn't generate an explanation. This might be due to high traffic or a temporary issue."}
+          <p className="text-gray-600 max-w-md mx-auto mb-3 text-lg">
+            {"We couldn't generate an explanation. This might be due to a temporary issue."}
+          </p>
+          {error?.message && error.message.includes("API key") && (
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
+              <p className="font-bold">API Key Issue</p>
+              <p>There appears to be an issue with the OpenAI API key. Please try again or contact support if the problem persists.</p>
+            </div>
+          )}
+          <p className="text-gray-500 max-w-md mx-auto mb-6 text-sm bg-gray-50 p-3 rounded">
+            <strong>Technical details:</strong> {error?.message || "Unknown error"}
           </p>
           <Button 
             onClick={onTryAgain} 
