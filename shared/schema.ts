@@ -10,6 +10,7 @@ export const explanations = pgTable("explanations", {
   longExplanation: text("long_explanation").notNull(),
   flashcards: text("flashcards").default("[]"), // JSON string of flashcards
   flowchart: text("flowchart").default(""), // Text-based flowchart
+  illustration: text("illustration").default(""), // URL or base64 image for visual aid
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -19,6 +20,7 @@ export const insertExplanationSchema = createInsertSchema(explanations).pick({
   longExplanation: true,
   flashcards: true,
   flowchart: true,
+  illustration: true,
 });
 
 // Request schema for generating explanations
@@ -44,4 +46,5 @@ export interface ExplanationResponse {
   explanationType: "short" | "long";
   flashcards?: Flashcard[];
   flowchart?: string;
+  illustration?: string; // URL or base64 encoded image
 }

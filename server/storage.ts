@@ -69,6 +69,7 @@ export class MemStorage implements IStorage {
       longExplanation: insertExplanation.longExplanation,
       flashcards: insertExplanation.flashcards || "[]",
       flowchart: insertExplanation.flowchart || "",
+      illustration: insertExplanation.illustration || "",
       createdAt
     };
     

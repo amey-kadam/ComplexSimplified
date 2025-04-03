@@ -1,4 +1,9 @@
 import OpenAI from "openai";
+import { promises as fs } from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+import https from 'https';
+import { Readable } from 'stream';
 
 // Initialize OpenAI client
 const openai = new OpenAI({ 
@@ -52,19 +57,94 @@ export async function generateExplanation(
 }
 
 /**
+ * Downloads an image from a URL and converts it to a base64 string
+ * @param url The URL of the image to download
+ * @returns Promise with the base64 encoded image
+ */
+async function downloadImageAsBase64(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    https.get(url, (response) => {
+      if (response.statusCode !== 200) {
+        reject(new Error(`Failed to download image, status code: ${response.statusCode}`));
+        return;
+      }
+
+      const chunks: Buffer[] = [];
+      response.on('data', (chunk) => chunks.push(chunk));
+      response.on('end', async () => {
+        try {
+          const buffer = Buffer.concat(chunks);
+          // Resize and optimize the image
+          const optimizedImage = await sharp(buffer)
+            .resize(800, 600, { fit: 'inside', withoutEnlargement: true })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+          
+          const base64Image = optimizedImage.toString('base64');
+          resolve(base64Image);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      response.on('error', reject);
+    }).on('error', reject);
+  });
+}
+
+/**
+ * Generates an illustration for a topic using DALL-E
+ * @param topic The topic to illustrate
+ * @returns Promise with the base64 encoded image
+ */
+async function generateIllustration(topic: string): Promise<string> {
+  try {
+    const prompt = `Create a colorful, educational illustration for kids explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style. Make it visually engaging and suitable for children.`;
+    
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt,
+      n: 1,
+      size: "1024x1024",
+      quality: "standard",
+    });
+
+    const imageUrl = response.data[0].url;
+    if (!imageUrl) {
+      throw new Error("No image URL returned from DALL-E");
+    }
+
+    // Download the image and convert to base64
+    const base64Image = await downloadImageAsBase64(imageUrl);
+    return base64Image;
+  } catch (error) {
+    console.error("Error generating illustration:", error);
+    throw new Error("Failed to generate illustration");
+  }
+}
+
+/**
  * Generates both short and long explanations for a topic in a single batch request
- * Along with flashcards and a flowchart
+ * Along with flashcards, a flowchart, and an illustration
  * @param topic The complex topic to explain
- * @returns Object containing both short and long explanations, flashcards, and flowchart
+ * @returns Object containing both short and long explanations, flashcards, flowchart, and illustration
  */
 export async function generateBothExplanations(topic: string): Promise<{
   shortExplanation: string;
   longExplanation: string;
   flashcards: string;
   flowchart: string;
+  illustration: string;
 }> {
   try {
-    const response = await openai.chat.completions.create({
+    // Step 1: Generate text content (explanations, flashcards, flowchart)
+    let textContent: {
+      shortExplanation: string;
+      longExplanation: string;
+      flashcards: string;
+      flowchart: string;
+    };
+    
+    const textResponse = await openai.chat.completions.create({
       model: MODEL,
       messages: [
         {
@@ -96,17 +176,32 @@ export async function generateBothExplanations(topic: string): Promise<{
       max_tokens: 2000,
     });
 
-    const content = response.choices[0].message.content;
+    const content = textResponse.choices[0].message.content;
     if (!content) {
       throw new Error("Empty response from OpenAI");
     }
 
     const parsedResponse = JSON.parse(content);
-    return {
+    textContent = {
       shortExplanation: parsedResponse.shortExplanation,
       longExplanation: parsedResponse.longExplanation,
       flashcards: JSON.stringify(parsedResponse.flashcards),
       flowchart: parsedResponse.flowchart
+    };
+
+    // Step 2: Generate illustration
+    let illustration = "";
+    try {
+      illustration = await generateIllustration(topic);
+    } catch (imageError) {
+      console.error("Error generating illustration:", imageError);
+      // Continue without illustration
+    }
+    
+    // Return results
+    return {
+      ...textContent,
+      illustration
     };
   } catch (error) {
     console.error("Error generating explanations:", error);

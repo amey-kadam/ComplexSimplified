@@ -31,29 +31,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
             : cachedExplanation.longExplanation,
           explanationType,
           flashcards: flashcards,
-          flowchart: cachedExplanation.flowchart
+          flowchart: cachedExplanation.flowchart,
+          illustration: cachedExplanation.illustration
         });
       }
       
-      // Generate new explanations with flashcards and flowchart
-      const { shortExplanation, longExplanation, flashcards, flowchart } = await generateBothExplanations(topic);
+      // Generate new explanations with flashcards, flowchart, and illustration
+      const { shortExplanation, longExplanation, flashcards, flowchart, illustration } = await generateBothExplanations(topic);
       
-      // Store both explanations with flashcards and flowchart in storage
+      // Store both explanations with flashcards, flowchart, and illustration in storage
       await storage.createExplanation({
         topic,
         shortExplanation,
         longExplanation,
         flashcards,
-        flowchart
+        flowchart,
+        illustration
       });
       
-      // Return the requested explanation type along with flashcards and flowchart
+      // Return the requested explanation type along with flashcards, flowchart, and illustration
       res.json({
         topic,
         explanation: explanationType === "short" ? shortExplanation : longExplanation,
         explanationType,
         flashcards: JSON.parse(flashcards),
-        flowchart
+        flowchart,
+        illustration
       });
       
     } catch (error) {

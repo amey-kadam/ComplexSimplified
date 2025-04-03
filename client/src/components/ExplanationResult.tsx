@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy, RefreshCcw, Info, Sparkles, Book, PenTool, ArrowRight } from "lucide-react";
+import { ClipboardCopy, RefreshCcw, Info, Sparkles, Book, PenTool, ArrowRight, ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
@@ -101,7 +101,7 @@ export default function ExplanationResult({ result, onTryAgain }: ExplanationRes
 
       <div className="p-6">
         <Tabs defaultValue="explanation" className="mb-4">
-          <TabsList className="grid w-full grid-cols-3 bg-orange-50">
+          <TabsList className="grid w-full grid-cols-4 bg-orange-50">
             <TabsTrigger value="explanation" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:to-orange-500 data-[state=active]:text-white">
               <Sparkles className="h-4 w-4 mr-2" />
               Explanation
@@ -113,6 +113,10 @@ export default function ExplanationResult({ result, onTryAgain }: ExplanationRes
             <TabsTrigger value="flowchart" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:to-orange-500 data-[state=active]:text-white">
               <ArrowRight className="h-4 w-4 mr-2" />
               Flowchart
+            </TabsTrigger>
+            <TabsTrigger value="illustration" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:to-orange-500 data-[state=active]:text-white">
+              <ImageIcon className="h-4 w-4 mr-2" />
+              Illustration
             </TabsTrigger>
           </TabsList>
           
@@ -180,6 +184,28 @@ export default function ExplanationResult({ result, onTryAgain }: ExplanationRes
               <div className="prose prose-lg max-w-none">
                 {formattedFlowchart}
               </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="illustration" className="mt-5">
+            <div className="bg-white rounded-xl shadow-md p-6 border-2 border-yellow-200">
+              <h3 className="text-xl font-bold mb-4 gradient-text">Visual Illustration</h3>
+              {result.illustration ? (
+                <div className="flex justify-center">
+                  <div className="rounded-lg overflow-hidden shadow-lg border-4 border-yellow-200">
+                    <img 
+                      src={`data:image/jpeg;base64,${result.illustration}`} 
+                      alt={`Illustration of ${result.topic}`}
+                      className="max-w-full"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center p-6 bg-orange-50 rounded-lg">
+                  <ImageIcon className="h-12 w-12 mx-auto text-orange-400 mb-3" />
+                  <p className="text-gray-700">No illustration available for this topic.</p>
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>
