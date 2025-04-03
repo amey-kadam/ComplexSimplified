@@ -1,7 +1,6 @@
 import { explanations, type Explanation, type InsertExplanation } from "@shared/schema";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
 import { eq, ilike } from "drizzle-orm";
+import { db } from "./db";
 
 export interface IStorage {
   // Get explanation by topic
@@ -10,11 +9,6 @@ export interface IStorage {
   // Store a new explanation
   createExplanation(explanation: InsertExplanation): Promise<Explanation>;
 }
-
-// Initialize the Postgres client
-const queryClient = postgres(process.env.DATABASE_URL!);
-// Initialize the Drizzle client
-const db = drizzle(queryClient);
 
 export class PgStorage implements IStorage {
   async getExplanationByTopic(topic: string): Promise<Explanation | undefined> {
