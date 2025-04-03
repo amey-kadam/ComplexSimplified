@@ -136,21 +136,21 @@ async function downloadImageAsBase64(url: string): Promise<string> {
 /**
  * Generates an illustration for a topic using DALL-E
  * @param topic The topic to illustrate
- * @param ageGroup The target age group (kids, preteen, teen, adult)
+ * @param knowledgeLevel The target knowledge level (beginner, intermediate, advanced, expert)
  * @returns Promise with the base64 encoded image
  */
-async function generateIllustration(topic: string, ageGroup: string = "kids"): Promise<string> {
+async function generateIllustration(topic: string, knowledgeLevel: string = "beginner"): Promise<string> {
   try {
     let prompt = "";
     
-    if (ageGroup === "kids") {
-      prompt = `Create a colorful, educational illustration for young children (5-8 years old) explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style with cartoon-like characters. Make it visually engaging with minimal text and suitable for young children.`;
-    } else if (ageGroup === "preteen") {
-      prompt = `Create an educational illustration for pre-teens (9-12 years old) explaining "${topic}". Use a fun, colorful style with slightly more detailed diagrams than for younger kids. Include some basic labels and make it engaging for pre-teen learning with relatable characters and examples from school subjects.`;
-    } else if (ageGroup === "teen") {
-      prompt = `Create an educational illustration for teenagers (13-17 years old) explaining "${topic}". Use a modern, appealing graphic style with more detailed diagrams, clear labels, and a design that would appeal to high school students. Include elements relevant to teenage interests and curriculum.`;
-    } else { // adult
-      prompt = `Create a clear, informative illustration for adults explaining "${topic}". Use a professional design with well-organized diagrams, proper labels, and a clean aesthetic. Focus on accurate representation of concepts with an approachable but mature style.`;
+    if (knowledgeLevel === "beginner") {
+      prompt = `Create a colorful, educational illustration for beginners (ages 5-10) explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style with cartoon-like characters. Make it visually engaging with minimal text and suitable for young learners or complete beginners to the topic.`;
+    } else if (knowledgeLevel === "intermediate") {
+      prompt = `Create an educational illustration for intermediate learners (ages 11-16) explaining "${topic}". Use a clear, engaging style with more detailed diagrams than for beginners. Include properly labeled components and make it suitable for students with basic knowledge of the subject. Balance visual appeal with informational content.`;
+    } else if (knowledgeLevel === "advanced") {
+      prompt = `Create an educational illustration for advanced learners (ages 17-25) explaining "${topic}". Use a sophisticated graphic style with detailed, accurate diagrams, comprehensive labels, and a design that would appeal to college students or people with good prior knowledge. Include relevant theoretical elements and practical applications.`;
+    } else { // expert
+      prompt = `Create a professional-grade illustration explaining "${topic}" for experts or specialists. Use a technical, precise design with comprehensive diagrams, detailed labels, and a clean, sophisticated aesthetic. Focus on accuracy, nuance, and depth of information. Include advanced concepts, edge cases, and technical details that would be relevant to professionals in the field.`;
     }
     
     const response = await openai.images.generate({
@@ -205,43 +205,48 @@ export async function generateBothExplanations(
       flowchart: string;
     };
     
-    // Check if the topic contains age group information
-    let ageGroup = "kids"; // Default to kids
+    // Check if the topic contains knowledge level information
+    let knowledgeLevel = "beginner"; // Default to beginner
     let cleanTopic = topic;
     
     if (topic.includes("explain for")) {
-      if (topic.includes("5-8 year olds")) {
-        ageGroup = "kids";
-      } else if (topic.includes("9-12 year olds")) {
-        ageGroup = "preteen";
-      } else if (topic.includes("13-17 year olds")) {
-        ageGroup = "teen";
-      } else if (topic.includes("adults")) {
-        ageGroup = "adult";
+      if (topic.includes("beginners") || topic.includes("5-10 year olds")) {
+        knowledgeLevel = "beginner";
+      } else if (topic.includes("intermediate") || topic.includes("11-16 year olds")) {
+        knowledgeLevel = "intermediate";
+      } else if (topic.includes("advanced") || topic.includes("17-25 year olds")) {
+        knowledgeLevel = "advanced";
+      } else if (topic.includes("expert") || topic.includes("adults") || topic.includes("professionals")) {
+        knowledgeLevel = "expert";
       }
       
-      // Remove the age group instruction from the topic
+      // Remove the knowledge level instruction from the topic
       cleanTopic = topic.split("(explain for")[0].trim();
     }
     
-    // Customize system prompt based on age group
+    // Customize system prompt based on knowledge level
     let systemContent = "";
-    if (ageGroup === "kids") {
-      systemContent = `You are an expert at explaining complex topics for 5-8 year old children. 
-            Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences children understand.
-            Avoid all jargon and technical terms.`;
-    } else if (ageGroup === "preteen") {
-      systemContent = `You are an expert at explaining complex topics for 9-12 year old pre-teens. 
-            Use straightforward language, relatable examples, and analogies that connect to school subjects.
-            Define any technical terms you use.`;
-    } else if (ageGroup === "teen") {
-      systemContent = `You are an expert at explaining complex topics for 13-17 year old teenagers. 
-            Use age-appropriate language with some technical terms (defined when introduced).
-            Make examples relevant to high school curriculum and teen interests.`;
-    } else { // adult
-      systemContent = `You are an expert at explaining complex topics for adults without specialized knowledge. 
-            Use plain language but don't oversimplify, provide relevant examples and meaningful analogies.
-            You can use some field-specific terminology with brief definitions.`;
+    if (knowledgeLevel === "beginner") {
+      systemContent = `You are an expert at explaining complex topics for complete beginners (equivalent to ages 5-10). 
+            Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences anyone can understand.
+            Avoid all jargon and technical terms. Assume no prior knowledge of the subject.
+            Focus on making the concept engaging and approachable with a sense of wonder.`;
+    } else if (knowledgeLevel === "intermediate") {
+      systemContent = `You are an expert at explaining complex topics for people with basic knowledge (equivalent to ages 11-16). 
+            Use straightforward language with some field-specific terms (always defined when introduced).
+            Include relatable examples, clear analogies, and build on foundational concepts most people understand.
+            Explain how and why things work at a deeper level than beginner explanations.`;
+    } else if (knowledgeLevel === "advanced") {
+      systemContent = `You are an expert at explaining complex topics for people with solid knowledge (equivalent to ages 17-25). 
+            Use more sophisticated language with appropriate terminology (briefly explained if specialized).
+            Include detailed examples, nuanced explanations, and make connections to related concepts.
+            Don't oversimplify and include more theoretical background where relevant.`;
+    } else { // expert
+      systemContent = `You are an expert at explaining complex topics for knowledgeable audiences (professionals or enthusiasts).
+            Use field-appropriate language and technical terms with precision. Assume solid background knowledge.
+            Include in-depth analysis, cutting-edge perspectives, and sophisticated connections between concepts.
+            Don't shy away from complexity but ensure explanations remain clear and well-structured.
+            Focus on nuance, edge cases, and advanced applications of the concept.`;
     }
     
     // Add common instructions for content to generate
@@ -309,7 +314,7 @@ export async function generateBothExplanations(
     let illustration = "";
     if (includeIllustration) {
       try {
-        illustration = await generateIllustration(cleanTopic, ageGroup);
+        illustration = await generateIllustration(cleanTopic, knowledgeLevel);
       } catch (imageError) {
         console.error("Error generating illustration:", imageError);
         // Continue without illustration

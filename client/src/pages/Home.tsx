@@ -16,12 +16,12 @@ interface TopicOptions {
   includeIllustration: boolean;
 }
 
-type AgeGroup = "kids" | "preteen" | "teen" | "adult";
+type KnowledgeLevel = "beginner" | "intermediate" | "advanced" | "expert";
 
 export default function Home() {
   const [topic, setTopic] = useState("");
   const [result, setResult] = useState<ExplanationResponse | null>(null);
-  const [ageGroup, setAgeGroup] = useState<AgeGroup>("kids");
+  const [knowledgeLevel, setKnowledgeLevel] = useState<KnowledgeLevel>("beginner");
   const { toast } = useToast();
   
   // Explanation generation mutation
@@ -59,13 +59,10 @@ export default function Home() {
   
   const handleSubmit = (formTopic: string, explanationType: "short" | "long", options: TopicOptions) => {
     setTopic(formTopic);
-    // Add the age group to the topic string to customize the explanation for the selected age group
-    const topicWithAgeGroup = `${formTopic} (explain for ${ageGroup === "kids" ? "5-8 year olds" : 
-      ageGroup === "preteen" ? "9-12 year olds" : 
-      ageGroup === "teen" ? "13-17 year olds" : 
-      "adults"})`;
+    // Add the knowledge level to the topic string to customize the explanation 
+    const topicWithKnowledgeLevel = `${formTopic} (explain for ${knowledgeLevel})`;
     
-    mutate({ topic: topicWithAgeGroup, explanationType, options });
+    mutate({ topic: topicWithKnowledgeLevel, explanationType, options });
   };
   
   const handleTryAgain = () => {
@@ -78,14 +75,11 @@ export default function Home() {
         includeIllustration: true
       };
       
-      // Use the original topic but add age group instruction
-      const topicWithAgeGroup = `${topic} (explain for ${ageGroup === "kids" ? "5-8 year olds" : 
-        ageGroup === "preteen" ? "9-12 year olds" : 
-        ageGroup === "teen" ? "13-17 year olds" : 
-        "adults"})`;
+      // Use the original topic but add knowledge level instruction
+      const topicWithKnowledgeLevel = `${topic} (explain for ${knowledgeLevel})`;
       
       mutate({ 
-        topic: topicWithAgeGroup, 
+        topic: topicWithKnowledgeLevel, 
         explanationType: result.explanationType,
         options: defaultOptions
       });
@@ -101,9 +95,9 @@ export default function Home() {
     setTopic(exampleTopic);
   };
   
-  const handleAgeGroupChange = (group: AgeGroup) => {
-    setAgeGroup(group);
-    setResult(null); // Clear previous results when changing age group
+  const handleKnowledgeLevelChange = (level: KnowledgeLevel) => {
+    setKnowledgeLevel(level);
+    setResult(null); // Clear previous results when changing knowledge level
   };
 
   return (
@@ -117,51 +111,54 @@ export default function Home() {
           Enter any complex topic, and CurioPal will explain it in simple, easy-to-understand terms.
         </p>
         
-        {/* Age Group Selector */}
-        <div className="max-w-md mx-auto mb-4">
+        {/* Knowledge Level Selector */}
+        <div className="max-w-xl mx-auto mb-4">
           <div className="bg-gradient-to-r from-yellow-400 to-orange-400 p-1 rounded-xl shadow-md">
             <div className="flex justify-between bg-white rounded-lg p-1">
               <button 
-                onClick={() => handleAgeGroupChange("kids")}
+                onClick={() => handleKnowledgeLevelChange("beginner")}
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
-                  ageGroup === "kids" 
+                  knowledgeLevel === "beginner" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Kids (5-8)
+                Beginner
               </button>
               <button 
-                onClick={() => handleAgeGroupChange("preteen")}
+                onClick={() => handleKnowledgeLevelChange("intermediate")}
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
-                  ageGroup === "preteen" 
+                  knowledgeLevel === "intermediate" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Pre-teen (9-12)
+                Intermediate
               </button>
               <button 
-                onClick={() => handleAgeGroupChange("teen")}
+                onClick={() => handleKnowledgeLevelChange("advanced")}
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
-                  ageGroup === "teen" 
+                  knowledgeLevel === "advanced" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Teen (13-17)
+                Advanced
               </button>
               <button 
-                onClick={() => handleAgeGroupChange("adult")}
+                onClick={() => handleKnowledgeLevelChange("expert")}
                 className={`flex-1 py-2 px-3 text-sm font-medium rounded-md transition-all duration-200 hover:opacity-90 ${
-                  ageGroup === "adult" 
+                  knowledgeLevel === "expert" 
                     ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-sm" 
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                Adult (18+)
+                Expert
               </button>
             </div>
+          </div>
+          <div className="text-xs text-gray-500 mt-1 text-center">
+            From simple explanations for beginners to detailed concepts for experts
           </div>
         </div>
         
