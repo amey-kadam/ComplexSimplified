@@ -8,6 +8,33 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-orange-50 text-foreground;
+  }
+  
+  h1, h2, h3 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500;
+  }
+  
+  .btn-bright {
+    @apply bg-gradient-to-r from-yellow-400 to-red-500 hover:from-red-500 hover:to-yellow-400 transition-all duration-300 text-white font-medium;
+  }
+  
+  .card-highlight {
+    @apply border-2 border-yellow-400 shadow-lg hover:shadow-orange-200/50 transition-all duration-300;
+  }
+  
+  .animate-bounce-limited {
+    animation: bounce 2s infinite;
+    animation-iteration-count: 3;
   }
 }

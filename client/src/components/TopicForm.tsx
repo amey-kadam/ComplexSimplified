@@ -31,11 +31,11 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
   };
 
   return (
-    <Card className="bg-white rounded-xl shadow-md p-2 mb-8">
+    <Card className="bg-white rounded-xl shadow-lg p-3 mb-8 card-highlight">
       <CardContent className="pt-4">
         <form onSubmit={handleSubmit}>
-          <div className="mb-5">
-            <Label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="mb-6">
+            <Label htmlFor="topic" className="block text-lg font-medium gradient-text mb-2">
               What topic would you like explained?
             </Label>
             <div className="relative">
@@ -45,18 +45,18 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., Quantum physics, Climate change, Blockchain..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                className="w-full px-4 py-3 border-2 border-yellow-300 rounded-lg focus:border-orange-400 focus:ring-orange-300 text-lg"
                 required
               />
             </div>
           </div>
 
-          <div className="mb-6">
-            <h3 className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-8">
+            <h3 className="block text-lg font-medium gradient-text mb-3">
               Choose explanation length:
             </h3>
-            <div className="flex gap-3 flex-wrap">
-              <label className="relative flex-1 min-w-[120px]">
+            <div className="flex gap-4 flex-wrap">
+              <label className="relative flex-1 min-w-[140px]">
                 <input
                   type="radio"
                   name="explanationType"
@@ -65,11 +65,11 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("short")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center justify-center p-3 border-2 rounded-lg peer-checked:border-primary peer-checked:bg-primary/5 peer-focus:ring-2 peer-focus:ring-primary/30 transition cursor-pointer">
+                <div className="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
                   <div className="text-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mx-auto mb-1 text-primary"
+                      className="h-7 w-7 mx-auto mb-2 text-orange-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -81,12 +81,12 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                         d="M13 5l7 7-7 7M5 5l7 7-7 7"
                       />
                     </svg>
-                    <span className="block text-sm font-medium">Short</span>
-                    <span className="block text-xs text-gray-500">Quick summary</span>
+                    <span className="block text-base font-medium">Short</span>
+                    <span className="block text-sm text-gray-500">Quick summary</span>
                   </div>
                 </div>
               </label>
-              <label className="relative flex-1 min-w-[120px]">
+              <label className="relative flex-1 min-w-[140px]">
                 <input
                   type="radio"
                   name="explanationType"
@@ -95,11 +95,11 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                   onChange={() => setExplanationType("long")}
                   className="peer absolute opacity-0"
                 />
-                <div className="flex items-center justify-center p-3 border-2 rounded-lg peer-checked:border-primary peer-checked:bg-primary/5 peer-focus:ring-2 peer-focus:ring-primary/30 transition cursor-pointer">
+                <div className="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-yellow-400 peer-checked:bg-orange-50 peer-focus:ring-2 peer-focus:ring-orange-300 transition-all duration-300 cursor-pointer hover:shadow-md">
                   <div className="text-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mx-auto mb-1 text-primary"
+                      className="h-7 w-7 mx-auto mb-2 text-orange-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -111,8 +111,8 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
                         d="M4 6h16M4 12h16M4 18h16"
                       />
                     </svg>
-                    <span className="block text-sm font-medium">Long</span>
-                    <span className="block text-xs text-gray-500">Detailed explanation</span>
+                    <span className="block text-base font-medium">Long</span>
+                    <span className="block text-sm text-gray-500">Detailed explanation</span>
                   </div>
                 </div>
               </label>
@@ -121,7 +121,7 @@ export default function TopicForm({ initialTopic = "", onSubmit }: TopicFormProp
 
           <Button 
             type="submit" 
-            className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-6"
+            className="w-full btn-bright text-white font-medium py-7 text-lg rounded-xl"
           >
             Explain This Topic
           </Button>
