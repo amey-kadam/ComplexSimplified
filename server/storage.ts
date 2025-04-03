@@ -1,4 +1,7 @@
 import { explanations, type Explanation, type InsertExplanation } from "@shared/schema";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { eq, ilike } from "drizzle-orm";
 
 export interface IStorage {
   // Get explanation by topic
@@ -8,6 +11,34 @@ export interface IStorage {
   createExplanation(explanation: InsertExplanation): Promise<Explanation>;
 }
 
+// Initialize the Postgres client
+const queryClient = postgres(process.env.DATABASE_URL!);
+// Initialize the Drizzle client
+const db = drizzle(queryClient);
+
+export class PgStorage implements IStorage {
+  async getExplanationByTopic(topic: string): Promise<Explanation | undefined> {
+    // Case-insensitive search for the topic using ILIKE pattern
+    const normalizedTopic = topic.trim();
+    
+    const results = await db.select()
+      .from(explanations)
+      .where(ilike(explanations.topic, `%${normalizedTopic}%`))
+      .limit(1);
+      
+    return results[0];
+  }
+  
+  async createExplanation(insertExplanation: InsertExplanation): Promise<Explanation> {
+    const result = await db.insert(explanations)
+      .values(insertExplanation)
+      .returning();
+    
+    return result[0];
+  }
+}
+
+// Keep MemStorage for fallback or testing
 export class MemStorage implements IStorage {
   private explanations: Map<number, Explanation>;
   private currentId: number;
@@ -41,4 +72,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Use PostgreSQL storage
+export const storage = new PgStorage();
