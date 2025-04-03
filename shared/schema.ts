@@ -27,6 +27,9 @@ export const insertExplanationSchema = createInsertSchema(explanations).pick({
 export const generateExplanationSchema = z.object({
   topic: z.string().min(1, "Topic is required").max(200, "Topic is too long"),
   explanationType: z.enum(["short", "long"]),
+  includeFlashcards: z.boolean().default(true),
+  includeFlowchart: z.boolean().default(true),
+  includeIllustration: z.boolean().default(true),
 });
 
 export type InsertExplanation = z.infer<typeof insertExplanationSchema>;

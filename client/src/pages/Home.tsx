@@ -10,6 +10,12 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { ExplanationResponse } from "@shared/schema";
 
+interface TopicOptions {
+  includeFlashcards: boolean;
+  includeFlowchart: boolean;
+  includeIllustration: boolean;
+}
+
 export default function Home() {
   const [topic, setTopic] = useState("");
   const [result, setResult] = useState<ExplanationResponse | null>(null);
@@ -19,14 +25,19 @@ export default function Home() {
   const { mutate, isPending, isError, error, reset } = useMutation({
     mutationFn: async ({ 
       topic, 
-      explanationType 
+      explanationType,
+      options
     }: { 
       topic: string; 
-      explanationType: "short" | "long"; 
+      explanationType: "short" | "long";
+      options: TopicOptions;
     }) => {
       const response = await apiRequest("POST", "/api/explain", {
         topic,
         explanationType,
+        includeFlashcards: options.includeFlashcards,
+        includeFlowchart: options.includeFlowchart,
+        includeIllustration: options.includeIllustration
       });
       return response.json() as Promise<ExplanationResponse>;
     },
@@ -43,17 +54,25 @@ export default function Home() {
     },
   });
   
-  const handleSubmit = (formTopic: string, explanationType: "short" | "long") => {
+  const handleSubmit = (formTopic: string, explanationType: "short" | "long", options: TopicOptions) => {
     setTopic(formTopic);
-    mutate({ topic: formTopic, explanationType });
+    mutate({ topic: formTopic, explanationType, options });
   };
   
   const handleTryAgain = () => {
     reset();
     if (topic && result) {
+      // Default options when trying again
+      const defaultOptions: TopicOptions = {
+        includeFlashcards: true,
+        includeFlowchart: true,
+        includeIllustration: true
+      };
+      
       mutate({ 
         topic, 
-        explanationType: result.explanationType 
+        explanationType: result.explanationType,
+        options: defaultOptions
       });
     }
   };

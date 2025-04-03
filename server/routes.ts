@@ -12,7 +12,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Validate request body
       const validatedBody = generateExplanationSchema.parse(req.body);
-      const { topic, explanationType } = validatedBody;
+      const { topic, explanationType, includeFlashcards, includeFlowchart, includeIllustration } = validatedBody;
       
       // Check cache first
       const cachedExplanation = await storage.getExplanationByTopic(topic);
@@ -24,20 +24,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
           : [];
           
         // Return cached explanation if available
-        return res.json({
+        const response: any = {
           topic: cachedExplanation.topic,
           explanation: explanationType === "short" 
             ? cachedExplanation.shortExplanation 
             : cachedExplanation.longExplanation,
-          explanationType,
-          flashcards: flashcards,
-          flowchart: cachedExplanation.flowchart,
-          illustration: cachedExplanation.illustration
-        });
+          explanationType
+        };
+        
+        // Only include selected features
+        if (includeFlashcards) {
+          response.flashcards = flashcards;
+        }
+        
+        if (includeFlowchart) {
+          response.flowchart = cachedExplanation.flowchart;
+        }
+        
+        if (includeIllustration) {
+          response.illustration = cachedExplanation.illustration;
+        }
+        
+        return res.json(response);
       }
       
-      // Generate new explanations with flashcards, flowchart, and illustration
-      const { shortExplanation, longExplanation, flashcards, flowchart, illustration } = await generateBothExplanations(topic);
+      // Generate new explanations with optional flashcards, flowchart, and illustration
+      const { shortExplanation, longExplanation, flashcards, flowchart, illustration } = await generateBothExplanations(
+        topic,
+        includeFlashcards,
+        includeFlowchart,
+        includeIllustration
+      );
       
       // Store both explanations with flashcards, flowchart, and illustration in storage
       await storage.createExplanation({
@@ -49,15 +66,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         illustration
       });
       
-      // Return the requested explanation type along with flashcards, flowchart, and illustration
-      res.json({
+      // Return the requested explanation type along with selected features
+      const response: any = {
         topic,
         explanation: explanationType === "short" ? shortExplanation : longExplanation,
-        explanationType,
-        flashcards: JSON.parse(flashcards),
-        flowchart,
-        illustration
-      });
+        explanationType
+      };
+      
+      // Only include selected features
+      if (includeFlashcards) {
+        response.flashcards = JSON.parse(flashcards);
+      }
+      
+      if (includeFlowchart) {
+        response.flowchart = flowchart;
+      }
+      
+      if (includeIllustration) {
+        response.illustration = illustration;
+      }
+      
+      res.json(response);
       
     } catch (error) {
       if (error instanceof ZodError) {

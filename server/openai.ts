@@ -124,11 +124,19 @@ async function generateIllustration(topic: string): Promise<string> {
 
 /**
  * Generates both short and long explanations for a topic in a single batch request
- * Along with flashcards, a flowchart, and an illustration
+ * Along with optional flashcards, flowchart, and illustration
  * @param topic The complex topic to explain
- * @returns Object containing both short and long explanations, flashcards, flowchart, and illustration
+ * @param includeFlashcards Whether to include flashcards (defaults to true)
+ * @param includeFlowchart Whether to include a flowchart (defaults to true)
+ * @param includeIllustration Whether to include an illustration (defaults to true)
+ * @returns Object containing both short and long explanations and optional flashcards, flowchart, and illustration
  */
-export async function generateBothExplanations(topic: string): Promise<{
+export async function generateBothExplanations(
+  topic: string,
+  includeFlashcards: boolean = true,
+  includeFlowchart: boolean = true,
+  includeIllustration: boolean = true
+): Promise<{
   shortExplanation: string;
   longExplanation: string;
   flashcards: string;
@@ -144,27 +152,41 @@ export async function generateBothExplanations(topic: string): Promise<{
       flowchart: string;
     };
     
+    // Construct the system message based on what's needed
+    let systemContent = `You are an expert at explaining complex topics in simple terms that anyone can understand. 
+            Use simple language, concrete examples, and engaging analogies.
+            Avoid jargon, technical terms, and complex sentences.
+            
+            You will provide the following components for the topic:
+            1. A SHORT explanation (2-3 sentences, ~50 words)
+            2. A LONG explanation (several paragraphs, ~300 words)`;
+            
+    if (includeFlashcards) {
+      systemContent += `\n            3. FLASHCARDS (5 question-answer pairs to help learn the topic)`;
+    }
+    
+    if (includeFlowchart) {
+      systemContent += `\n            4. A simple FLOWCHART (represented in text format with arrows -> and bullet points)`;
+    }
+    
+    systemContent += `\n\nFormat your response as valid JSON with the fields:
+            - "shortExplanation" (string)
+            - "longExplanation" (string)`;
+            
+    if (includeFlashcards) {
+      systemContent += `\n            - "flashcards" (array of objects with "question" and "answer" fields)`;
+    }
+    
+    if (includeFlowchart) {
+      systemContent += `\n            - "flowchart" (string with a simple text-based flowchart)`;
+    }
+    
     const textResponse = await openai.chat.completions.create({
       model: MODEL,
       messages: [
         {
           role: "system",
-          content: 
-            `You are an expert at explaining complex topics in simple terms that anyone can understand. 
-            Use simple language, concrete examples, and engaging analogies.
-            Avoid jargon, technical terms, and complex sentences.
-            
-            You will provide FOUR components for the topic:
-            1. A SHORT explanation (2-3 sentences, ~50 words)
-            2. A LONG explanation (several paragraphs, ~300 words)
-            3. FLASHCARDS (5 question-answer pairs to help learn the topic)
-            4. A simple FLOWCHART (represented in text format with arrows -> and bullet points)
-            
-            Format your response as valid JSON with the fields:
-            - "shortExplanation" (string)
-            - "longExplanation" (string)
-            - "flashcards" (array of objects with "question" and "answer" fields)
-            - "flowchart" (string with a simple text-based flowchart)`
+          content: systemContent
         },
         {
           role: "user",
@@ -185,17 +207,23 @@ export async function generateBothExplanations(topic: string): Promise<{
     textContent = {
       shortExplanation: parsedResponse.shortExplanation,
       longExplanation: parsedResponse.longExplanation,
-      flashcards: JSON.stringify(parsedResponse.flashcards),
-      flowchart: parsedResponse.flowchart
+      flashcards: includeFlashcards && parsedResponse.flashcards 
+        ? JSON.stringify(parsedResponse.flashcards) 
+        : "[]",
+      flowchart: includeFlowchart && parsedResponse.flowchart 
+        ? parsedResponse.flowchart 
+        : ""
     };
 
-    // Step 2: Generate illustration
+    // Step 2: Generate illustration if requested
     let illustration = "";
-    try {
-      illustration = await generateIllustration(topic);
-    } catch (imageError) {
-      console.error("Error generating illustration:", imageError);
-      // Continue without illustration
+    if (includeIllustration) {
+      try {
+        illustration = await generateIllustration(topic);
+      } catch (imageError) {
+        console.error("Error generating illustration:", imageError);
+        // Continue without illustration
+      }
     }
     
     // Return results
