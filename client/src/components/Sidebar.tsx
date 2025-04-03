@@ -11,7 +11,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="h-screen w-16 md:w-64 flex flex-col bg-gradient-to-b from-yellow-200 to-yellow-300 border-r border-yellow-500 shadow-sm fixed left-0 top-0 z-10">
+    <div className="h-screen w-16 md:w-64 flex flex-col bg-gradient-to-b from-orange-50 to-yellow-50 border-r shadow-sm fixed left-0 top-0 z-10">
       <div className="p-4 flex justify-center md:justify-start items-center">
         <span className="hidden md:inline-block text-2xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
           CurioPal
@@ -29,7 +29,7 @@ export default function Sidebar() {
                   <div
                     className={cn(
                       "flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-yellow-100 group cursor-pointer",
-                      isActive ? "bg-yellow-400 text-gray-800 border-2 border-yellow-500" : "text-gray-700 hover:text-gray-800"
+                      isActive ? "bg-yellow-300 text-gray-800" : "text-gray-700 hover:text-gray-800"
                     )}
                   >
                     <span className="text-xl mr-3">{item.icon}</span>
@@ -48,7 +48,7 @@ export default function Sidebar() {
       </nav>
       
       <div className="p-4 hidden md:block">
-        <div className="p-3 bg-yellow-400 rounded-lg border-2 border-yellow-500">
+        <div className="p-3 bg-yellow-100 rounded-lg">
           <p className="text-sm text-gray-700">
             Need help? Contact support@curiopal.com
           </p>

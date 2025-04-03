@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-blue-400 text-foreground;
+    @apply font-sans antialiased bg-yellow-300 text-foreground;
   }
   
   h1, h2, h3 {
@@ -18,19 +18,19 @@
 
 @layer components {
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500;
   }
   
   .gradient-bg {
-    @apply bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700;
+    @apply bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500;
   }
   
   .btn-bright {
-    @apply bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transition-all duration-300 text-white font-medium;
+    @apply bg-gradient-to-r from-yellow-400 to-red-500 hover:from-red-500 hover:to-yellow-400 transition-all duration-300 text-white font-medium;
   }
   
   .card-highlight {
-    @apply border-2 border-blue-500 shadow-lg hover:shadow-blue-300/50 transition-all duration-300;
+    @apply border-2 border-yellow-400 shadow-lg hover:shadow-orange-200/50 transition-all duration-300;
   }
   
   .animate-bounce-limited {
