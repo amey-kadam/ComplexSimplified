@@ -27,22 +27,64 @@ export async function generateExplanation(
     const explanationType = isLongExplanation ? "detailed" : "brief";
     const maxTokens = isLongExplanation ? 1000 : 300;
     
+    // Check if the topic contains age group information
+    let ageGroup = "kids"; // Default to kids
+    let cleanTopic = topic;
+    
+    if (topic.includes("explain for")) {
+      if (topic.includes("5-8 year olds")) {
+        ageGroup = "kids";
+      } else if (topic.includes("9-12 year olds")) {
+        ageGroup = "preteen";
+      } else if (topic.includes("13-17 year olds")) {
+        ageGroup = "teen";
+      } else if (topic.includes("adults")) {
+        ageGroup = "adult";
+      }
+      
+      // Remove the age group instruction from the topic
+      cleanTopic = topic.split("(explain for")[0].trim();
+    }
+    
+    // Customize system prompt based on age group
+    let systemContent = "";
+    if (ageGroup === "kids") {
+      systemContent = `You are an expert at explaining complex topics in simple terms that a 5-8 year old child could understand. 
+        Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences a young child would understand.
+        Avoid all jargon, technical terms, and complex sentences.
+        Make the explanation ${explanationType}, engaging, and easy to follow.`;
+    } else if (ageGroup === "preteen") {
+      systemContent = `You are an expert at explaining complex topics in simple terms that a 9-12 year old pre-teen could understand. 
+        Use straightforward language, relatable examples, and analogies that connect to school subjects and common pre-teen interests.
+        Minimize jargon, define any technical terms used, and keep sentences moderately complex.
+        Make the explanation ${explanationType}, interesting, and educational.`;
+    } else if (ageGroup === "teen") {
+      systemContent = `You are an expert at explaining complex topics in terms that a 13-17 year old teenager could understand. 
+        Use age-appropriate language with some technical terms (defined when introduced), examples relevant to high school curriculum, and analogies that connect to teen interests and current events.
+        You can use more complex sentence structures but maintain clarity.
+        Make the explanation ${explanationType}, engaging, and intellectually stimulating.`;
+    } else { // adult
+      systemContent = `You are an expert at explaining complex topics in clear terms that an adult without specialized knowledge could understand. 
+        Use plain language but don't oversimplify, provide relevant examples and meaningful analogies.
+        You can use some field-specific terminology (with brief definitions) and varied sentence structures.
+        Make the explanation ${explanationType}, informative, and intellectually satisfying.`;
+    }
+    
+    // Add common instructions for all age groups
+    systemContent += `
+      Keep your response focused only on explaining the topic.
+      Do not include any disclaimers, notes, or anything other than the explanation itself.`;
+    
     const response = await openai.chat.completions.create({
       model: MODEL,
       messages: [
         {
           role: "system",
-          content: 
-            `You are an expert at explaining complex topics in simple terms that a 5-year-old child could understand. 
-            Use simple language, concrete examples, and engaging analogies.
-            Avoid jargon, technical terms, and complex sentences.
-            Make the explanation ${explanationType} and easy to follow.
-            Keep your response focused only on explaining the topic in simple terms.
-            Do not include any disclaimers, notes, or anything other than the explanation itself.`
+          content: systemContent
         },
         {
           role: "user",
-          content: `Explain this complex topic in simple terms that a 5-year-old would understand: ${topic}`
+          content: `Explain this topic: ${cleanTopic}`
         }
       ],
       max_tokens: maxTokens,
@@ -94,11 +136,22 @@ async function downloadImageAsBase64(url: string): Promise<string> {
 /**
  * Generates an illustration for a topic using DALL-E
  * @param topic The topic to illustrate
+ * @param ageGroup The target age group (kids, preteen, teen, adult)
  * @returns Promise with the base64 encoded image
  */
-async function generateIllustration(topic: string): Promise<string> {
+async function generateIllustration(topic: string, ageGroup: string = "kids"): Promise<string> {
   try {
-    const prompt = `Create a colorful, educational illustration for kids explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style. Make it visually engaging and suitable for children.`;
+    let prompt = "";
+    
+    if (ageGroup === "kids") {
+      prompt = `Create a colorful, educational illustration for young children (5-8 years old) explaining "${topic}" in a simple way. Use bright colors, simple shapes, and a friendly style with cartoon-like characters. Make it visually engaging with minimal text and suitable for young children.`;
+    } else if (ageGroup === "preteen") {
+      prompt = `Create an educational illustration for pre-teens (9-12 years old) explaining "${topic}". Use a fun, colorful style with slightly more detailed diagrams than for younger kids. Include some basic labels and make it engaging for pre-teen learning with relatable characters and examples from school subjects.`;
+    } else if (ageGroup === "teen") {
+      prompt = `Create an educational illustration for teenagers (13-17 years old) explaining "${topic}". Use a modern, appealing graphic style with more detailed diagrams, clear labels, and a design that would appeal to high school students. Include elements relevant to teenage interests and curriculum.`;
+    } else { // adult
+      prompt = `Create a clear, informative illustration for adults explaining "${topic}". Use a professional design with well-organized diagrams, proper labels, and a clean aesthetic. Focus on accurate representation of concepts with an approachable but mature style.`;
+    }
     
     const response = await openai.images.generate({
       model: "dall-e-3",
@@ -152,10 +205,47 @@ export async function generateBothExplanations(
       flowchart: string;
     };
     
-    // Construct the system message based on what's needed
-    let systemContent = `You are an expert at explaining complex topics in simple terms that anyone can understand. 
-            Use simple language, concrete examples, and engaging analogies.
-            Avoid jargon, technical terms, and complex sentences.
+    // Check if the topic contains age group information
+    let ageGroup = "kids"; // Default to kids
+    let cleanTopic = topic;
+    
+    if (topic.includes("explain for")) {
+      if (topic.includes("5-8 year olds")) {
+        ageGroup = "kids";
+      } else if (topic.includes("9-12 year olds")) {
+        ageGroup = "preteen";
+      } else if (topic.includes("13-17 year olds")) {
+        ageGroup = "teen";
+      } else if (topic.includes("adults")) {
+        ageGroup = "adult";
+      }
+      
+      // Remove the age group instruction from the topic
+      cleanTopic = topic.split("(explain for")[0].trim();
+    }
+    
+    // Customize system prompt based on age group
+    let systemContent = "";
+    if (ageGroup === "kids") {
+      systemContent = `You are an expert at explaining complex topics for 5-8 year old children. 
+            Use very simple language, concrete examples, colorful analogies, and relate to everyday experiences children understand.
+            Avoid all jargon and technical terms.`;
+    } else if (ageGroup === "preteen") {
+      systemContent = `You are an expert at explaining complex topics for 9-12 year old pre-teens. 
+            Use straightforward language, relatable examples, and analogies that connect to school subjects.
+            Define any technical terms you use.`;
+    } else if (ageGroup === "teen") {
+      systemContent = `You are an expert at explaining complex topics for 13-17 year old teenagers. 
+            Use age-appropriate language with some technical terms (defined when introduced).
+            Make examples relevant to high school curriculum and teen interests.`;
+    } else { // adult
+      systemContent = `You are an expert at explaining complex topics for adults without specialized knowledge. 
+            Use plain language but don't oversimplify, provide relevant examples and meaningful analogies.
+            You can use some field-specific terminology with brief definitions.`;
+    }
+    
+    // Add common instructions for content to generate
+    systemContent += `
             
             You will provide the following components for the topic:
             1. A SHORT explanation (2-3 sentences, ~50 words)
@@ -190,7 +280,7 @@ export async function generateBothExplanations(
         },
         {
           role: "user",
-          content: `Explain this complex topic in simple terms: ${topic}`
+          content: `Explain this complex topic in simple terms: ${cleanTopic}`
         }
       ],
       response_format: { type: "json_object" },
@@ -219,7 +309,7 @@ export async function generateBothExplanations(
     let illustration = "";
     if (includeIllustration) {
       try {
-        illustration = await generateIllustration(topic);
+        illustration = await generateIllustration(cleanTopic, ageGroup);
       } catch (imageError) {
         console.error("Error generating illustration:", imageError);
         // Continue without illustration
